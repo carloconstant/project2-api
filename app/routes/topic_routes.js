@@ -17,18 +17,19 @@ router.get('/topics', requireToken, (req, res, next) => {
 
 // create
 router.post('/topics', requireToken, (req, res, next) => {
-const topic = req.body.topic
-topic.owner = req.user.id
+  const topic = req.body.topic
+  topic.owner = req.user.id
   Topic.create(topic)
-    .then(topic => res.status(201).json( { topic: topic.toObject() } ))
+    .then(topic => res.status(201).json({ topic: topic.toObject() }))
     .catch(next)
 })
 // SHOW
 router.get('/topics/:id', requireToken, (req, res, next) => {
   const id = req.params.id
-  Topic.find({ owner: req.user.id, id: id })
+  Topic.findById(id)
+    .populate('owner')
     .then(handle404)
-    .then(event => res.json({ event: event.toObject() }))
+    .then(topic => res.json({ topic: topic }))
     .catch(next)
 })
 // delete
@@ -44,17 +45,17 @@ router.delete('/topics/:id', requireToken, (req, res, next) => {
 })
 
 // update
-router.patch('/topics/:id', requireToken, (req, res, next) => {
-  const id = req.params.id
-  const topicData = req.body.topic
-  Topic.findById(id)
-    .then(handle404)
-    .then(topic => requireOwnership(req, topic))
-    .then(topic => {
-      Object.assign(topic, topicData)
-      return topic.save()
-    })
-    .then(() => res.sendStatus(204))
-    .catch(next)
-})
+// router.patch('/topics/:id', requireToken, (req, res, next) => {
+//   const id = req.params.id
+//   const topicData = req.body.topic
+//   Topic.findById(id)
+//     .then(handle404)
+//     .then(topic => requireOwnership(req, topic))
+//     .then(topic => {
+//       Object.assign(topic, topicData)
+//       return topic.save()
+//     })
+//     .then(() => res.sendStatus(204))
+//     .catch(next)
+// })
 module.exports = router
