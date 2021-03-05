@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const topicSchema = new mongoose.Schema({
-  title:{
+  title: {
     type: String,
     required: true,
     unique: true
@@ -14,6 +14,4 @@ const topicSchema = new mongoose.Schema({
 }, {
   timestamps: true
 })
-module.exports = {
-  mongoose.model('Topic',topicSchema)
-}
+module.exports = mongoose.model('Topic', topicSchema)
