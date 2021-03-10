@@ -8,18 +8,21 @@ const removeBlanks = require('../../lib/remove_blank_fields')
 const requireToken = passport.authenticate('bearer', { session: false })
 const router = express.Router()
 // INDEX
-router.get('/topics', requireToken, (req, res, next) => {
-  const userId = req.user.id
-  Topic.find({ owner: userId })
-    .then(topics => res.json(topics))
+router.get('/topics', (req, res, next) => {
+  Topic.find()
+    .populate('owner')
+    .then(topics => res.json({ topics: topics }))
     .catch(next)
 })
+// router.get(topics => {
+//   return topics.map(topic => topic.toObject())
+// })
 
 // create
 router.post('/topics', requireToken, (req, res, next) => {
-  const topic = req.body.topic
-  topic.owner = req.user.id
-  Topic.create(topic)
+  const topicData = req.body.topic
+  topicData.owner = req.user.id
+  Topic.create(topicData)
     .then(topic => res.status(201).json({ topic: topic.toObject() }))
     .catch(next)
 })

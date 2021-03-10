@@ -1,7 +1,7 @@
 #!/bin/bash
 
-API="http://localhost:4741"
-URL_PATH="/sign-up"
+# API="http://localhost:4741"
+# URL_PATH="/sign-up"
 
 curl "${API}${URL_PATH}" \
   --include \
@@ -9,7 +9,7 @@ curl "${API}${URL_PATH}" \
   --header "Content-Type: application/json" \
   --data '{
     "credentials": {
-      "email": "'"${EMAIL}"'",
+      "username": "'"${USERNAME}"'",
       "password": "'"${PASSWORD}"'",
       "password_confirmation": "'"${PASSWORD}"'"
     }
